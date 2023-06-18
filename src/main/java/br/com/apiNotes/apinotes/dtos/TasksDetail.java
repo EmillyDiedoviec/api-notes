@@ -1,0 +1,17 @@
+package br.com.apiNotes.apinotes.dtos;
+
+import br.com.apiNotes.apinotes.models.Task;
+
+import java.util.UUID;
+
+public record TasksDetail(
+        UUID id,
+        String title,
+        String description,
+        Boolean archive
+) {
+    public TasksDetail(Task task) {
+        this(task.getId(), task.getTitle(), task.getDescription(), task.getArchive());
+    }
+
+}
