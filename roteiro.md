@@ -13,21 +13,18 @@
 - validar a conta (cumpriu todos os requisitos?) fazer
 
 ### Logar
-- email (essa conta existe?)
-- senha (essa é a senha da conta?)
-- lembrar de mim (botão para lembrar)
-- esqueci a senha
+- email (essa conta existe?) (feito)
+- senha (essa é a senha da conta?) (feito)
 
 # Recados:
 - titulo
 - status
-- descrição
-- id
-- arquivar
+- descrição (feito)
+- id (feito)
+- arquivar (feito)
 
-### Validações
-### Colocar o filtro QueryParams nas coisas que forem necessarias
-### Criar um recado
-### Editar o recado
-### Excluir o recado
-### Listar os recados
+### Colocar o filtro QueryParams nas coisas que forem necessarias (feito)
+### Criar um recado (feito)
+### Editar o recado (feito)
+### Excluir o recado (feito)
+### Listar os recados (feito)

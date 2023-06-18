@@ -24,8 +24,9 @@ public class TaskController {
     }
 
     @GetMapping("/{email}/tasksUser")
-    public ResponseEntity getTasks(@PathVariable String email){
+    public ResponseEntity getTasks(@PathVariable String email, @RequestParam(required = false) String title, @RequestParam(required = false) boolean archived){
         var tasks = DataBase.getAllTasks(email);
+        var esseTemReatribuicao = DataBase.getEmail(email).getTasks();
 
         if(tasks == null) {
             return ResponseEntity.badRequest().body(new ErrorData("Task não localizada."));
@@ -50,10 +51,6 @@ public class TaskController {
     public ResponseEntity updateTask(@PathVariable String email, @PathVariable UUID idTask, @RequestBody UpdateTask taskUpdated ){
         var user = DataBase.getUserByEmail(email);
 
-        if(user == null) {
-            return ResponseEntity.badRequest().body(new ErrorData("Usuário não localizado."));
-        }
-
         var taskUpdateFilter = user.getTasks().stream().filter(t -> t.getId().equals(idTask)).findAny();
 
         if(taskUpdateFilter == null) {
@@ -63,5 +60,15 @@ public class TaskController {
         taskUpdateFilter.get().UpdateTask(taskUpdated);
         
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{email}/tasksUser/{idTask}/archive")
+    public ResponseEntity archiveTask(@PathVariable String email, @PathVariable UUID idTask) {
+
+        var task = DataBase.getTaskByID(idTask, email);
+        var archived = task.getArchive();
+
+        task.setArchive(!archived);
+        return ResponseEntity.ok().body(task.getArchive());
     }
 }

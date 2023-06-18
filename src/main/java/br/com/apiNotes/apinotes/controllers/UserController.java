@@ -16,6 +16,11 @@ public class UserController {
         if (DataBase.userExitsByEmail(data.email())){
             return ResponseEntity.badRequest().body(new ErrorData("Email já cadastrado"));
         }
+
+        if (!DataBase.passwordUser(data.password(), data.repassword())){
+            return ResponseEntity.badRequest().body(new ErrorData("As senhas devem ser iguais."));
+        }
+
         var user = new User(
                 data.email(),
                 data.password()

@@ -34,7 +34,7 @@ public abstract class DataBase {
     }
 
     public static boolean passwordUser(String password, String repassword){
-        if(password == repassword){
+        if(password.equals(repassword) ){
             return true;
         }else{
             return false;

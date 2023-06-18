@@ -9,6 +9,8 @@ public record CreateUser(
         @Email
         String email,
         @NotBlank
-        String password
+        String password,
+        @NotBlank
+        String repassword
 )
 {}
