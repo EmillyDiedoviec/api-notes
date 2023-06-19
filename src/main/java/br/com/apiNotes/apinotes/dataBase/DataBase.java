@@ -16,14 +16,6 @@ public abstract class DataBase {
         if(user.getEmail() == null){
             throw new RuntimeException("Usuário inválido");
         }
-        var email = user.getEmail();
-        if(email.indexOf('@') < 0 || email.indexOf('@') != email.lastIndexOf('@')) {
-            throw new RuntimeException("Email inválido");
-        }
-
-        if (user.getPassword().length() < 6){
-            throw new RuntimeException("Número de caracteres inválido, mínimo de 6 caracteres");
-        }
 
         users.add(user);
     }

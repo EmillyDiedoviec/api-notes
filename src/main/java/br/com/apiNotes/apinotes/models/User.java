@@ -12,7 +12,7 @@ public class User {
 
     private String email;
     private String password;
-    private ArrayList<Task> tasks;
+    private List<Task> tasks;
 
     public User(String email, String password) {
         this.email = email;

@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,6 +34,15 @@ public class TaskController {
             return ResponseEntity.badRequest().body(new ErrorData("Task não localizada."));
         }
 
+        if(title != null) {
+            esseTemReatribuicao = esseTemReatribuicao.stream().filter(t -> t.getTitle().contains((title))).toList();
+            return ResponseEntity.ok().body(esseTemReatribuicao);
+        }
+
+        if(archived) {
+            esseTemReatribuicao = esseTemReatribuicao.stream().filter(a -> a.getArchive().equals(true)).toList();
+            return ResponseEntity.ok().body(esseTemReatribuicao);
+        }
         return ResponseEntity.ok().body(tasks);
     }
 
