@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/users")
 public class UserController {
     @PostMapping
@@ -28,7 +29,7 @@ public class UserController {
 
         DataBase.addUser(user);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body(user);
     }
 
     @GetMapping("/{email}")
