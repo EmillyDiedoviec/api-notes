@@ -10,10 +10,10 @@ public record TasksDetail(
         UUID id,
         String title,
         String description,
-        Boolean archive
+        Boolean archived
 ) {
     public TasksDetail(Task task) {
-        this(task.getId(), task.getTitle(), task.getDescription(), task.getArchive());
+        this(task.getId(), task.getTitle(), task.getDescription(), task.getArchived());
     }
 
 }

@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 public abstract class DataBase {
@@ -43,6 +44,14 @@ public abstract class DataBase {
         return userFiltered.get();
     }
 
+    public  static User getEmailUserTeste(String email){
+
+        return DataBase.users.stream()
+                .filter(u -> u.getEmail().equals(email))
+                .findFirst().orElseThrow();
+
+    }
+
     public static List<TasksDetail> getAllTasks(String email){
         var user = getUserByEmail(email);
         var tasks = user.getTasks();
@@ -60,9 +69,15 @@ public abstract class DataBase {
 
         return taskFiltered.get();
     }
-
     public static User getEmail(String email) {
-        return users.stream().filter(user -> user.getEmail().equals(email)).findFirst().orElseThrow();
+        return users.stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("User not found for email: " + email));
+    }
+
+    public static List<User> getAllUsers(){
+        return users;
     }
 
 }

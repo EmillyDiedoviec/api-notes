@@ -14,6 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 @RequestMapping("/users")
 public class UserController {
+
+    @GetMapping
+    public ResponseEntity getUsers(){
+        var userList = DataBase.getAllUsers();
+        return ResponseEntity.ok().body(userList);
+    }
+
     @PostMapping
     public ResponseEntity createUser(@RequestBody CreateUser data){
         if (DataBase.userExitsByEmail(data.email())){
@@ -31,8 +38,9 @@ public class UserController {
 
         DataBase.addUser(user);
 
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok().body("Conta criada com sucesso!");
     }
+
 
     @GetMapping("/{email}")
     public  ResponseEntity getUser(@PathVariable String email){
