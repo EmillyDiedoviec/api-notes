@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @GetMapping
-    public ResponseEntity getUsers(){
+    public ResponseEntity getAllUsers(){
         var userList = DataBase.getAllUsers();
         return ResponseEntity.ok().body(userList);
     }
