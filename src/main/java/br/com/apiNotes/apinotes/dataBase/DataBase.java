@@ -58,10 +58,6 @@ public abstract class DataBase {
         var user = getUserByEmail(email);
         var taskFiltered = user.getTasks().stream().filter(id -> id.getId().equals(idTask)).findAny();
 
-        if(taskFiltered.isEmpty()) {
-            return null;
-        }
-
         return taskFiltered.get();
     }
 

@@ -31,28 +31,17 @@ public class TaskController {
         var tasks = DataBase.getAllTasks(email);
         var esseTemReatribuicao = DataBase.getEmail(email).getTasks();
 
-        if(tasks == null) {
-            return ResponseEntity.badRequest().body(new ErrorData("Task não localizada."));
+        if(userTasks == null) {
+            return ResponseEntity.badRequest().body(new ErrorData("Nenhum recado adicionado."));
         }
 
-        if(title != null) {
-            esseTemReatribuicao = esseTemReatribuicao.stream().filter(t -> t.getTitle().contains((title))).toList();
-            return ResponseEntity.ok().body(esseTemReatribuicao);
-        }
-
-        if(archived) {
-            esseTemReatribuicao = esseTemReatribuicao.stream().filter(a -> a.getArchive().equals(true)).toList();
-            return ResponseEntity.ok().body(esseTemReatribuicao);
-        }
-        return ResponseEntity.ok().body(tasks);
+        return ResponseEntity.ok().body(userTasks);
     }
 
     @DeleteMapping ("/{email}/{idTask}")
     public ResponseEntity deleteTasks(@PathVariable String email, @PathVariable UUID idTask){
         var user = DataBase.getUserByEmail(email);
-        if(user == null) {
-            return ResponseEntity.badRequest().body(new ErrorData("Usuário não localizado."));
-        }
+
         var taskId = DataBase.getTaskByID(idTask, email);
 
         user.getTasks().remove(taskId);
@@ -63,7 +52,7 @@ public class TaskController {
     public ResponseEntity updateTask(@PathVariable String email, @PathVariable UUID idTask, @RequestBody UpdateTask taskUpdated ){
         var user = DataBase.getUserByEmail(email);
 
-        var taskUpdateFilter = user.getTasks().stream().filter(t -> t.getId().equals(idTask)).findAny();
+        var taskUpdateFilter = DataBase.getTaskByID(idTask, email);
 
         if(taskUpdateFilter == null) {
             return ResponseEntity.badRequest().body(new ErrorData("Recado não encontrado."));
@@ -74,13 +63,17 @@ public class TaskController {
         return ResponseEntity.ok().body(taskUpdated);
     }
 
-    @PostMapping("/{email}/{idTask}/archive")
-    public ResponseEntity archiveTask(@PathVariable String email, @PathVariable UUID idTask) {
+    @PutMapping("/{email}/{idTask}/archive")
+    public ResponseEntity archiveDTask(@PathVariable String email, @PathVariable UUID idTask) {
+        try {
+            var task = DataBase.getTaskByID(idTask, email);
 
-        var task = DataBase.getTaskByID(idTask, email);
-        var archived = task.getArchive();
+            var archived = task.getArchived();
+            task.setArchived(!archived);
 
-        task.setArchive(!archived);
-        return ResponseEntity.ok().body(task.getArchive());
+            return ResponseEntity.ok().body(task.getArchived());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorData("Task não encontrada"));
+        }
     }
 }
