@@ -29,41 +29,27 @@ public class TaskController {
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity getTasks(@PathVariable String email){
+    public ResponseEntity getTasks(@PathVariable String email, @RequestParam(required = false) String title, @RequestParam(required = false) boolean archived){
         var userTasks = DataBase.getEmail(email).getTasks();
 
         if(userTasks == null) {
             return ResponseEntity.badRequest().body(new ErrorData("Nenhum recado adicionado."));
         }
 
-        return ResponseEntity.ok().body(userTasks);
-    }
-
-    @GetMapping("/{email}/filter")
-    public ResponseEntity filterTasks(@RequestParam(required = false) String title, @RequestParam(required = false) Boolean archived, @PathVariable String email){
-
-        var tasks = DataBase.getEmail(email).getTasks();
-
-        if(tasks.size()>0){
-            if (title != null) {
-                tasks = tasks
-                        .stream()
-                        .filter(t -> t.getTitle() != null && t.getDescription().toLowerCase().contains((title)))
-                        .toList();
-            }
-
-            if (archived != null) {
-                tasks = tasks
-                        .stream()
-                        .filter(t -> archived == t.getArchived())
-                        .toList();
-            }
-
-            return ResponseEntity.ok().body(tasks.stream().map(TasksDetail::new).toList());
+        if(userTasks == null) {
+            return ResponseEntity.badRequest().body(new ErrorData("Task não localizada."));
+        }
+        if(title != null) {
+            userTasks = userTasks.stream().filter(t -> t.getTitle().contains((title))).toList();
+            return ResponseEntity.ok().body(userTasks);
         }
 
-        return  ResponseEntity.badRequest().body(new ErrorData("Nenhum recado existente para filtragem!"));
+        if(archived) {
+            userTasks = userTasks.stream().filter(a -> a.getArchived().equals(true)).toList();
+            return ResponseEntity.ok().body(userTasks);
+        }
 
+        return ResponseEntity.ok().body(userTasks);
     }
 
     @DeleteMapping ("/{email}/{idTask}")
